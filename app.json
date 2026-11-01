@@ -8,7 +8,8 @@
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.anonymous.mobile"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Pair Review needs access to your photos so you can choose a profile picture.",
+          "cameraPermission": "Pair Review needs camera access so you can take photos of the places you review.",
+          "microphonePermission": false
+        }
+      ],
       [
         "expo-splash-screen",
         {
