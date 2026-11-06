@@ -3,8 +3,11 @@ import '../global.css';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
+import { Text } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
+import { GradientScreen } from '@/components/gradient-screen';
+import { PrimaryButton } from '@/components/primary-button';
 import { ProfileContext, useProfileState } from '@/hooks/use-profile';
 import { useSession } from '@/hooks/use-session';
 
@@ -21,6 +24,18 @@ export default function RootLayout() {
   }, [ready]);
 
   if (!ready) return null;
+
+  // A failed load isn't the same as having no profile, so don't let the guards send them to set-profile.
+  if (profile.loadFailed) {
+    return (
+      <KeyboardProvider>
+        <GradientScreen className="justify-center px-8">
+          <Text className="mb-6 text-center text-white">Couldn&apos;t load your profile.</Text>
+          <PrimaryButton title="TRY AGAIN" onPress={profile.retry} />
+        </GradientScreen>
+      </KeyboardProvider>
+    );
+  }
 
   return (
     <ProfileContext.Provider value={profile}>
