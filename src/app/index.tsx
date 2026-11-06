@@ -28,10 +28,15 @@ export default function Home() {
             )}
             <Text className="text-3xl font-bold text-ink">Hi {profile?.name || 'there'}</Text>
           </Pressable>
-          <Text className="text-center text-muted">You&apos;re logged in. The home map goes here next.</Text>
+          <Pressable
+            onPress={() => router.push('/review')}
+            accessibilityRole="button"
+            className="mt-6 h-[52px] w-full items-center justify-center rounded-full bg-brand active:opacity-80">
+            <Text className="font-semibold text-white">Start review</Text>
+          </Pressable>
           <Pressable
             onPress={() => supabase.auth.signOut()}
-            className="mt-6 h-[52px] w-full items-center justify-center rounded-full border-[1.5px] border-ink bg-white active:opacity-80">
+            className="h-[52px] w-full items-center justify-center rounded-full border-[1.5px] border-ink bg-white active:opacity-80">
             <Text className="font-semibold text-ink">Log out</Text>
           </Pressable>
         </View>

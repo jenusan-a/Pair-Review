@@ -44,6 +44,7 @@ export default function RootLayout() {
           <Stack.Protected guard={!!session && profile.profileComplete}>
             <Stack.Screen name="index" />
             <Stack.Screen name="profile" />
+            <Stack.Screen name="review" />
           </Stack.Protected>
           <Stack.Protected guard={!!session && !profile.profileComplete}>
             <Stack.Screen name="set-profile" />
