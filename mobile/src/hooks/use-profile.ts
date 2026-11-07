@@ -16,7 +16,7 @@ type ProfileState = {
 
 export const ProfileContext = createContext<ProfileState | null>(null);
 
-async function fetchProfile(userId: string) {
+export async function fetchProfile(userId: string) {
   const { data, error } = await supabase
     .from('profiles')
     .select('name, picture_url')
@@ -25,8 +25,6 @@ async function fetchProfile(userId: string) {
   if (error) throw error;
   return data;
 }
-
-
 
 // Loads the logged-in user's profile row. Used once in _layout.tsx, which shares it through ProfileContext.
 export function useProfileState(userId: string | undefined): ProfileState {
@@ -49,8 +47,6 @@ export function useProfileState(userId: string | undefined): ProfileState {
         setFailedFor(userId);
       });
   }, [userId, attempt]);
-
-  
 
   async function refresh() {
     if (!userId) return;

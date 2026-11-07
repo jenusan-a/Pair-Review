@@ -8,6 +8,7 @@ import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
+import { PartnerContext, usePartnerState } from '@/hooks/use-partner';
 import { ProfileContext, useProfileState } from '@/hooks/use-profile';
 import { useSession } from '@/hooks/use-session';
 
@@ -16,6 +17,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { session, loading } = useSession();
   const profile = useProfileState(session?.user.id);
+  const partner = usePartnerState(session?.user.id);
   const ready = !loading && !profile.loading;
 
   // Keep the splash screen up until we know whether you're logged in and have a profile.
@@ -39,21 +41,23 @@ export default function RootLayout() {
 
   return (
     <ProfileContext.Provider value={profile}>
-      <KeyboardProvider>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Protected guard={!!session && profile.profileComplete}>
-            <Stack.Screen name="index" />
-            <Stack.Screen name="profile" />
-            <Stack.Screen name="review" />
-          </Stack.Protected>
-          <Stack.Protected guard={!!session && !profile.profileComplete}>
-            <Stack.Screen name="set-profile" />
-          </Stack.Protected>
-          <Stack.Protected guard={!session}>
-            <Stack.Screen name="login" />
-          </Stack.Protected>
-        </Stack>
-      </KeyboardProvider>
+      <PartnerContext.Provider value={partner}>
+        <KeyboardProvider>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={!!session && profile.profileComplete}>
+              <Stack.Screen name="index" />
+              <Stack.Screen name="profile" />
+              <Stack.Screen name="review" />
+            </Stack.Protected>
+            <Stack.Protected guard={!!session && !profile.profileComplete}>
+              <Stack.Screen name="set-profile" />
+            </Stack.Protected>
+            <Stack.Protected guard={!session}>
+              <Stack.Screen name="login" />
+            </Stack.Protected>
+          </Stack>
+        </KeyboardProvider>
+      </PartnerContext.Provider>
     </ProfileContext.Provider>
   );
 }
