@@ -31,7 +31,7 @@ export function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
 
   async function connect() {
     setError('');
-    const code = entered.trim().toUpperCase();
+    const code = entered.trim();
     if (!code) {
       setError("Enter your partner's code.");
       return;
@@ -87,9 +87,8 @@ export function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
           placeholder="Partner's code"
           value={entered}
           onChangeText={setEntered}
-          autoCapitalize="characters"
-          autoCorrect={false}
-          maxLength={6}
+          keyboardType="number-pad"
+          maxLength={4}
         />
         {error ? <Text className="text-center text-white">{error}</Text> : null}
         <PrimaryButton title="CONNECT" onPress={connect} loading={connecting} />
