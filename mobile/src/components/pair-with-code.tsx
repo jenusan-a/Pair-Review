@@ -1,60 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, Share, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Share, View } from 'react-native';
 
 import { AuthField } from '@/components/auth-field';
-import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
-import { usePartner } from '@/hooks/use-partner';
+import { Text } from '@/components/text';
 import { supabase } from '@/utils/supabase';
 
-export default function Review() {
-  const { partner, failed: partnerFailed, refresh: refreshPartner } = usePartner();
-  const [retrying, setRetrying] = useState(false);
-
-  async function retry() {
-    setRetrying(true);
-    try {
-      await refreshPartner();
-    } catch (e) {
-      console.error('Error loading partner:', e);
-    } finally {
-      setRetrying(false);
-    }
-  }
-
-  return (
-    <GradientScreen>
-      <View className="px-5 py-2">
-        <Pressable onPress={() => router.back()} accessibilityRole="button" accessibilityLabel="Back" className="self-start p-2">
-          <Ionicons name="chevron-back" size={24} color="white" />
-        </Pressable>
-      </View>
-
-      <View className="flex-1 justify-center px-8 pb-6">
-        {partnerFailed ? (
-          <View>
-            <Text className="mb-6 text-center text-white">Couldn&apos;t check who you&apos;re paired with.</Text>
-            <PrimaryButton title="TRY AGAIN" onPress={retry} loading={retrying} />
-          </View>
-        ) : partner === undefined ? (
-          <ActivityIndicator color="white" />
-        ) : partner ? (
-          <View className="items-center">
-            <Text className="text-3xl font-bold text-white">Paired with {partner.name || 'your partner'}</Text>
-            {/* shortcut: placeholder until review modes exist */}
-            <Text className="mt-1.5 text-center text-[15px] text-white/80">Choosing a mode comes next.</Text>
-          </View>
-        ) : (
-          <PairWithCode onPaired={refreshPartner} />
-        )}
-      </View>
-    </GradientScreen>
-  );
-}
-
-function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
+// Shows your code to share and a field for entering your partner's. onPaired runs once a review has started.
+export function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
   const [myCode, setMyCode] = useState<string>();
   const [codeFailed, setCodeFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
@@ -78,7 +32,7 @@ function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
 
   async function connect() {
     setError('');
-    const code = entered.trim().toUpperCase();
+    const code = entered.trim();
     if (!code) {
       setError("Enter your partner's code.");
       return;
@@ -134,9 +88,8 @@ function PairWithCode({ onPaired }: { onPaired: () => Promise<void> }) {
           placeholder="Partner's code"
           value={entered}
           onChangeText={setEntered}
-          autoCapitalize="characters"
-          autoCorrect={false}
-          maxLength={6}
+          keyboardType="number-pad"
+          maxLength={4}
         />
         {error ? <Text className="text-center text-white">{error}</Text> : null}
         <PrimaryButton title="CONNECT" onPress={connect} loading={connecting} />

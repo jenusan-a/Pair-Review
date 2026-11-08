@@ -2,10 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, View } from 'react-native';
 
 import { GradientScreen } from '@/components/gradient-screen';
 import { ProfileForm } from '@/components/profile-form';
+import { Text } from '@/components/text';
 import { useProfile } from '@/hooks/use-profile';
 
 export default function Profile() {

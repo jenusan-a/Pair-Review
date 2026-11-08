@@ -3,12 +3,12 @@ import '../global.css';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Text } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
-import { PartnerContext, usePartnerState } from '@/hooks/use-partner';
+import { Text } from '@/components/text';
+import { ActiveReviewContext, useActiveReviewState } from '@/hooks/use-active-review';
 import { ProfileContext, useProfileState } from '@/hooks/use-profile';
 import { useSession } from '@/hooks/use-session';
 
@@ -17,7 +17,7 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const { session, loading } = useSession();
   const profile = useProfileState(session?.user.id);
-  const partner = usePartnerState(session?.user.id);
+  const activeReview = useActiveReviewState(session?.user.id);
   const ready = !loading && !profile.loading;
 
   // Keep the splash screen up until we know whether you're logged in and have a profile.
@@ -41,7 +41,7 @@ export default function RootLayout() {
 
   return (
     <ProfileContext.Provider value={profile}>
-      <PartnerContext.Provider value={partner}>
+      <ActiveReviewContext.Provider value={activeReview}>
         <KeyboardProvider>
           <Stack screenOptions={{ headerShown: false }}>
             <Stack.Protected guard={!!session && profile.profileComplete}>
@@ -57,7 +57,7 @@ export default function RootLayout() {
             </Stack.Protected>
           </Stack>
         </KeyboardProvider>
-      </PartnerContext.Provider>
+      </ActiveReviewContext.Provider>
     </ProfileContext.Provider>
   );
 }
