@@ -3,11 +3,11 @@ import '../global.css';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
-import { Text } from 'react-native';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 
 import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
+import { Text } from '@/components/text';
 import { ActiveReviewContext, useActiveReviewState } from '@/hooks/use-active-review';
 import { ProfileContext, useProfileState } from '@/hooks/use-profile';
 import { useSession } from '@/hooks/use-session';

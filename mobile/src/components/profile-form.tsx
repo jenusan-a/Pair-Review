@@ -2,10 +2,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
-import { Alert, Pressable, Text, View } from 'react-native';
+import { Alert, Pressable, View } from 'react-native';
 
 import { AuthField } from '@/components/auth-field';
 import { PrimaryButton } from '@/components/primary-button';
+import { Text } from '@/components/text';
 import { useProfile } from '@/hooks/use-profile';
 import { supabase } from '@/utils/supabase';
 

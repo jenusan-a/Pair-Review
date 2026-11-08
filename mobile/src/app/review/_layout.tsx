@@ -1,10 +1,11 @@
 import { Stack } from 'expo-router';
 import { useState } from 'react';
-import { ActivityIndicator, Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { BackButton } from '@/components/back-button';
 import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
+import { Text } from '@/components/text';
 import { useActiveReview } from '@/hooks/use-active-review';
 
 // Decides which review page you can be on: the code page with no live review, the review page with one.

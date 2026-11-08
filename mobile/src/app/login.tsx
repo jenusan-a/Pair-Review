@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import { AuthField } from '@/components/auth-field';
 import { GradientScreen } from '@/components/gradient-screen';
 import { PrimaryButton } from '@/components/primary-button';
+import { Text } from '@/components/text';
 import { supabase } from '@/utils/supabase';
 
 export default function Login() {

@@ -1,9 +1,10 @@
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect } from 'react';
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
 import { GradientScreen } from '@/components/gradient-screen';
 import { ProfileForm } from '@/components/profile-form';
+import { Text } from '@/components/text';
 
 export default function SetProfile() {
   // Ask for the camera now so it's already allowed when adding review photos later.

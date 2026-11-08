@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { ActivityIndicator, Pressable, Share, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, Share, View } from 'react-native';
 
 import { AuthField } from '@/components/auth-field';
 import { PrimaryButton } from '@/components/primary-button';
+import { Text } from '@/components/text';
 import { supabase } from '@/utils/supabase';
 
 // Shows your code to share and a field for entering your partner's. onPaired runs once a review has started.
