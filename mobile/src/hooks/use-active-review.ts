@@ -4,7 +4,13 @@ import { fetchProfile, type Profile } from '@/hooks/use-profile';
 import { supabase } from '@/utils/supabase';
 
 export type Partner = Profile & { id: string };
-export type ActiveReview = { id: string; partner: Partner };
+export type ActiveReview = {
+  id: string;
+  partner: Partner;
+  // Steps each of you has finished. You're both on step min(mine, partner's); mine > partner's means you're waiting.
+  myStepsDone: number;
+  partnerStepsDone: number;
+};
 
 type ActiveReviewState = {
   // undefined while still loading or after a failed load, null when not in a review.
@@ -18,16 +24,19 @@ export const ActiveReviewContext = createContext<ActiveReviewState | null>(null)
 async function fetchActiveReview(userId: string): Promise<ActiveReview | null> {
   const { data: review, error } = await supabase
     .from('reviews')
-    .select('id, user_a, user_b')
+    .select('id, user_a, user_b, a_steps_done, b_steps_done')
     .or(`user_a.eq.${userId},user_b.eq.${userId}`)
     .eq('status', 'in_progress')
     .maybeSingle();
   if (error) throw error;
   if (!review) return null;
 
-  const partnerId: string = review.user_a === userId ? review.user_b : review.user_a;
+  const iAmA = review.user_a === userId;
+  const partnerId: string = iAmA ? review.user_b : review.user_a;
   return {
     id: review.id,
+    myStepsDone: iAmA ? review.a_steps_done : review.b_steps_done,
+    partnerStepsDone: iAmA ? review.b_steps_done : review.a_steps_done,
     partner: { id: partnerId, ...((await fetchProfile(partnerId)) ?? { name: null, picture_url: null }) },
   };
 }
@@ -53,7 +62,7 @@ export function useActiveReviewState(userId: string | undefined): ActiveReviewSt
         });
 
     load();
-    // INSERT: the partner entered our code. UPDATE: one of us left. Policies on reviews mean only our own rows arrive.
+    // INSERT: the partner entered our code. UPDATE: one of us finished a step or left. Policies on reviews mean only our own rows arrive.
     const channel = supabase
       .channel(`reviews:${userId}`, { config: { postgres_changes_options: { wait: true } } })
       .on('postgres_changes', { event: '*', schema: 'public', table: 'reviews' }, load)
